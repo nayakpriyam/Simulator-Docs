@@ -36,17 +36,17 @@ Simulating a Conversion Reactor
 
 Consider the following problem statement to be simulated using Conversion Reactor:
 
- - Component System: Ethyl Acetate, Water, Acetic Acid, Ethanol
- - Thermodynamics: NRTL
- - Material Stream Information
+ - **Component System**: Ethyl Acetate, Water, Acetic Acid, Ethanol
+ - **Thermodynamics**: NRTL
+ - **Material Stream Information**
 
-	- Molar Flow Rate: 100 mol/s
-	- Mole Fraction (Ethyl Acetate): 0
-	- Mole Fraction (Water): 0
-	- Mole Fraction (Acetic Acid): 0.4
-	- Mole Fraction (Ethanol): 0.6
-	- Pressure: 101325 Pa
-	- Temperature: 300 K
+	- **Molar Flow Rate**: 100 mol/s
+	- **Mole Fraction (Ethyl Acetate)**: 0
+	- **Mole Fraction (Water)**: 0
+	- **Mole Fraction (Acetic Acid)**: 0.4
+	- **Mole Fraction (Ethanol)**: 0.6
+	- **Pressure**: 101325 Pa
+	- **Temperature**: 300 K
 
 Simulate a conversion reactor where Acetic Acid reacts with Ethanol to form Ethyl Acetate and Water. 
 The conversion of acetic acid is 30%. Assume the reactor to be operated isothermally.
@@ -197,12 +197,12 @@ Consider the following problem statement to be simulated using Conversion Reacto
  - **Thermodynamics**: Raoult's Law
  - **Material Stream Information**
 
-	**Molar Flow Rate**: 27.7778 mol/s
-	**Mole Fraction (Hydrogen)**: 0
-	**Mole Fraction (Carbon Monoxide)**: 0
-	**Mole Fraction (Methanol)**: 0
-	**Pressure**: 101325 Pa
-	**Temperature**: 366.5 K
+	 - **Molar Flow Rate**: 27.7778 mol/s
+	 - **Mole Fraction (Hydrogen)**: 0
+	 - **Mole Fraction (Carbon Monoxide)**: 0
+	 - **Mole Fraction (Methanol)**: 0
+	 - **Pressure**: 101325 Pa
+	 - **Temperature**: 366.5 K
 
 Simulate an equilibrium reactor where Hydrogen reacts with Carbon Monoxide to form Methanol. 
 The equilibirum constant is considered to be 0.5 and is defined on the basis of activity. 
@@ -233,7 +233,7 @@ Below listed points are the step by step explaination as to how to create and si
 		parameter Integer Nc = 3;
 		parameter data.GeneralProperties C[Nc] = {hyd,com,meth};
 		
- 7. Now, create two instances of the ``MaterialStream`` model ``ms`` as we require two material streams which will go as input and comes out as output. To do this, open diagram view of ``test`` model, drag & drop ``ms`` twice as shown in fig. Name the instances as ``Inlet`` and ``Outlet``.
+ 7. Now, create two instances of the ``MaterialStream`` model ``ms`` as we require two material streams which will go as input and comes out as output. To do this, open diagram view of ``EqRxr`` model, drag & drop ``ms`` twice as shown in fig. Name the instances as ``Inlet`` and ``Outlet``.
 
 	 .. image:: ../img/eq-ms-drop.png
 	
@@ -290,7 +290,163 @@ Below listed points are the step by step explaination as to how to create and si
   	  Inlet.x_pc[1, :] = {0.667,0.333,0};
 
 
+ 16. This completes the ``EquilibriumReactor`` package. Now click on ``Simulate`` button to simulate the ``EqRxr`` model. Switch to Plotting Perspective to view the results.
+ 
+ .. note::
+ 		 You can also find this example named ``EquilibriumReactor`` in the ``Simulator`` library under ``Examples`` package.
+
+
+		  
+Plug Flow Reactor
+---------------------
+
+The **Plug Flow Reactor (PFR)** is used to calculate the mole fraction of components at outlet stream when the reaction kinetics is defined.
+
+The plug flow reactor model have following connection ports:
+
+ - Two Material Streams: feed and outlet stream
+ - One Energy Stream: heat added
+
+To simulate a plug flow reactor, following calculation parameters must be provided:
+
+ - Calculation Mode ``Mode``
+ - Reaction Basis ``Basis``
+ - Reaction Phase ``Phase``
+ - Outlet Temperature ``Tdef`` (If calculation mode is Define Outlet Temperature)
+ - Number of Reactions ``Nr``
+ - Base Component ``Base_C``
+ - Stoichiometric Coefficient of Components in Reaction ``Coef_cr``
+ - Reaction Order ``DO_cr``
+ - Pre-exponential Factor ``Af_r``
+ - Activation Energy ``Ef_r``
+ - Pressure Drop ``Pdel``
+
+Among the above variables, first three variables are of type parameter String. First one, Calculation Mode ``Mode`` can have either of the sting values among the following:
+
+ - ``Isothermal``: If the reactor is operated isothermally
+ - ``Define Outlet Temperature``: If the reactor is operated at specified outlet temperature
+ - ``Adiabatic``: If the reactor is operated adiabatically
+
+Second one, Reaction Basis ``Basis`` can have either of the string values among the following:
+
+ - ``Molar Concentration``: If the reaction rate is defined in terms of Molar Concentration
+ - ``Mass Concentration``: If the reaction rate is defined in terms of Mass Concentration
+ - ``Molar Fractions``: If the reaction rate is defined in terms of Molar Fractions
+ - ``Mass Fractions``: If the reaction rate is defined in terms of Mass Fractions
+
+Third one, Reaction Phase ``Phase``, can have either of the string values among the following:
+
+ - ``Mixture``: If the reaction is a mixed phase reaction
+ - ``Liquid``: If the reaction is a liquid phase reaction
+ - ``Vapour``: If the reaction is a vapour phase reaction
+
+The other variables are of type parameter Real.
+During simulation, their values can specified directly under Reactor Specifications and Reactions by double clicking on the PFR model instance.
+
+
+Simulating a Plug Flow Reactor
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Consider the following problem statement to be simulated using Conversion Reactor:
+
+ - **Component System**: Hydrogen, Carbon Monoxide, Methanol
+ - **Thermodynamics**: Raoult's Law
+ - **Material Stream Information**
+
+	 - **Molar Flow Rate**: 27.7778 mol/s
+	 - **Mole Fraction (Hydrogen)**: 0
+	 - **Mole Fraction (Carbon Monoxide)**: 0
+	 - **Mole Fraction (Methanol)**: 0
+	 - **Pressure**: 101325 Pa
+	 - **Temperature**: 366.5 K
+
+Simulate an equilibrium reactor where Hydrogen reacts with Carbon Monoxide to form Methanol. 
+The equilibirum constant is considered to be 0.5 and is defined on the basis of activity. 
+Assume the reactor to be operated isothermally and the reaction to be taking place in vapor phase.
+
+Below listed points are the step by step explaination as to how to create and simulate this equilibrium reactor example.
+
+ 1. Create a package named ``PFR``.
+
+ 2. Create a model named ``MS`` inside ``PFR``. This is to extend ``MaterialStream`` model.
+
+ 3. Extend the model ``MaterialStream`` and necessary property method from ``ThermodynamicPackages`` ::
+
+		extends Simulator.Streams.MaterialStream;
+		extends Simulator.Files.ThermodynamicPackages.RaoultsLaw;
+		
+ 4. Create another new model named ``PFR_Test_II`` inside ``PFR``.
+ 
+ 5. Similar to the ``MaterialStream`` example model, import ``ChemsepDatabase`` and create variables for the compounds which are to be used from ``ChemsepDatabase``. ::
+	
+		import data = Simulator.Files.ChemsepDatabase;
+  		parameter data.Ethyleneoxide eth;
+  		parameter data.Ethyleneglycol eg;
+  		parameter data.Water wat;
+
+ 6. Define variables for Number of components ``Nc`` and component array ``C``. Also assign the variables created for the compounds to the component array. ::
+	
+		parameter Integer Nc = 3;
+		parameter data.GeneralProperties C[Nc] = {eth, wat, eg};
+		
+ 7. Now, create two instances of the ``MaterialStream`` model ``ms`` as we require two material streams which will go as input and comes out as output. To do this, open diagram view of ``PFR_Test_II` model, drag & drop ``MS`` twice as shown in fig. Name the instances as ``S1`` and ``S2``.
+
+	 .. image:: ../img/pfr-ms-drop.png
+	
+ 8. Now, Drag and drop the ``PFR`` model available under ``PFR`` package under ``UnitOperations``. Name the instance as ``B1``.
+
+	 .. image:: ../img/pfr-drop.png
+	
+ 9. Now double click on ``S1``. Component Parameters window opens. Go to Stream Specifications tab. 
+ There are two parameter ``Nc`` and ``C`` for which the values are to be entered. 
+ As the value for ``Nc`` and ``C`` are already declared earlier in step 6 while defining the variables, these variables are passed here instead of the values. 
+ Repeat this for the other material stream.
+	 
+	  	.. image:: ../img/eq-in-par.png
+	  
+ 10. Now double click on ``Eqreactor``. Component Parameters window opens. 
+ Go to Reactor Specifications tab and enter the values for parameters as mentioned below:
+     
+	 - ``Nc`` and ``C`` can be entered same as material stream 
+	 - ``CalcMode`` represents the operation mode for equilibrium reactor. Currently, equilibrium reactor support three different modes of operation which are Isothermal,Adiabatic and Defined Outlet Temperature. As per the problem statement, Isothermal is to be used here. So enter ``"Isothermal"``.
+
+	    .. image:: ../img/eq-par.png
+
+ 11. Go to Reactions tab and enter the reaction details as mentioned below:
+	 
+	 - ``Phase`` represents the reaction phase. Currently, the equilibrium reactor support two phases: vapour and liquid. As per the problem statement, it's a vapour phase reaction. So enter the ``Phase`` as ``Vapour``.
+	 - ``Basis`` represents the basis on which the equilibrium constant is defined. Currently, the equilibrium reactor support three basis: activity, mole fraction and partial pressure. As per the problem statement, the equilibrium constant is defined on basis of activity. SO enter the ``Basis`` as ``Activity``.
+	 - ``Coef_cr`` represents the stoichiometric coefficients of the components in the reaction. Enter the value as ``{{1}, {1}, {-1}, {-1}}``.
+	 - ``Rmode`` represents the different modes by which the equilibrium constant an be defined. Currently, equilibrium reactor supports two modes: Constant K and K as a function of temperature. As per the problem statement, equilibirum constant value is given. So enter ``Rmode`` as ``ConstantK``.
+	 - ``Kg`` represents the equilibrium constant value. Enter the value as {0.5}.
+	   
+	 .. image:: ../img/eqx-par.png
+	 
+ 12. Switch to text view. Following lines of code will be autogenrated ::
+	 
+	  Simulator.Examples.EquilibriumReactor.ms Inlet(Nc = Nc, C = C) annotation( ...);
+	  Simulator.Examples.EquilibriumReactor.ms Outlet(Nc = Nc, C = C) annotation( ...);
+	  Simulator.UnitOperations.EquilibriumReactor Eqreactor(Basis = "Activity",C = C, Coef_cr = {{-2}, {-1}, {1}}, Kg = {0.5}, Mode = "Isothermal", Nc = Nc, Phase = "Vapour", Rmode = "ConstantK") annotation( ...);
+  
+ 13. Now, connect the streams with unit operations. For this, switch back to Diagram view.
+ 
+     .. image:: ../img/eq-connected.png
+ 
+
+ 14. Switch to text view. Following lines of code will be autogenrated under ``equation`` section :: 
+  
+		connect(Inlet.Out, Eqreactor.In) annotation( ...);
+		connect(Eqreactor.Out, Outlet.In) annotation( ...);
+
+ 15. Specify the pressure, temperature, component mole fractions and molar flow rate for the inlet material stream ::
+
+  	  Inlet.T = 366.5;
+  	  Inlet.P = 101325;
+  	  Inlet.F_p[1] = 27.7778;
+  	  Inlet.x_pc[1, :] = {0.667,0.333,0};
+
+
  15. This completes the ``EquilibriumReactor`` package. Now click on ``Simulate`` button to simulate the ``EqRxr`` model. Switch to Plotting Perspective to view the results.
  
  .. note::
- 		 You can also find this package named ``EquilibriumReactor`` in the ``Simulator`` library under ``Examples`` package.
+ 		 You can also find this example named ``EquilibriumReactor`` in the ``Simulator`` library under ``Examples`` package.
