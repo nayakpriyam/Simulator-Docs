@@ -91,21 +91,21 @@ Molar flow rate of the stream is 100 mol/s and the components are in equimolar c
 
  1. Create a package called ``CompositeMS``
  
- 2. Create new model named ``ms`` in the package ``CompositeMS``
+ 2. Create new model named ``MS`` in the package ``CompositeMS``
  
- 3. Extend ``MaterialStream`` model inside ``ms`` ::
+ 3. Extend ``MaterialStream`` model inside ``MS`` ::
   
-     extends Simulator.Streams.Material_Stream;
+     extends Simulator.Streams.MaterialStream;
 	
- 4. Extend the necessary property method from ``ThermodynamicPackages`` inside ``ms`` ::
+ 4. Extend the necessary property method from ``ThermodynamicPackages`` inside ``MS`` ::
  
      extends Simulator.Files.ThermodynamicPackages.RaoultsLaw;
  
- 5. Create another new model called ``main`` inside ``CompositeMS``
+ 5. Create another new model called ``MatStreamSimulation`` inside ``CompositeMS``
 
- 6. Now, inside model ``main``, create an instance of ``ChemsepDatabase`` ::
+ 6. Now, inside model ``MatStreamSimulation``, create an instance of ``ChemsepDatabase`` ::
      
-	 import data = Simulator.Files.Chemsep_Database;
+	 import data = Simulator.Files.ChemsepDatabase;
 
  7. Create instances of components to be used ::
      
@@ -118,15 +118,15 @@ Molar flow rate of the stream is 100 mol/s and the components are in equimolar c
 	 
  9. Create an component array C to access the properties of components from `ChemsepDatabase` ::
  
-     parameter data.General_Properties C[Nc] = {benz, tol};
+     parameter data.GeneralProperties C[Nc] = {benz, tol};
 	 
- 10. Now, we will create an instance of the model ``ms``. 
-     To do this, open diagram view of ``main`` model, drag & drop ``ms`` as shown in fig. Name the model as ``ms1``
+ 10. Now, we will create an instance of the model ``MS``. 
+     To do this, open diagram view of ``MatStreamSimulation`` model, drag & drop ``MS`` as shown in fig. Name the model as ``ms1``
  
- 11. Switch to text view there will be generated code for instantiation of "ms". Pass the values of ``Nc`` and ``C`` 
-     as argument of the material stream instance ``ms1`` ::
+ 11. Switch to text view there will be generated code for instantiation of "MS". Pass the values of ``Nc`` and ``C`` 
+     as argument of the material stream instance ``S1`` ::
 	 
-	  Simulator.Test.cmpstms.ms ms1(Nc = Nc, C = C) annotation( ...);
+	  Simulator.Examples.CompositeMS.MS S1(Nc = Nc, C = C) annotation( ...);
 	  
  12. Specify values of input variables in equation section. Here, we will pass temperature, pressure, molar flow rate and mole fraction of components ::
  
@@ -135,8 +135,10 @@ Molar flow rate of the stream is 100 mol/s and the components are in equimolar c
       x_pc[1, :] = {0.5, 0,5};
       F_p[1] = 100;
 	 
-This completes the material stream package. Now click on ``Simulate`` button to simulate the ``main`` model. Alternatively, you can also
-find this package named ``COmpositeMS`` in the ``Simulator`` library under ``Examples`` package.
+This completes the material stream package. Now click on ``Simulate`` button to simulate the ``MatStreamSimulation`` model. Switch to Plotting Perspective to view the results.
+ 
+ .. note::
+ 		 You can also find this example named ``CompositeMS`` in the ``Simulator`` library under ``Examples`` package.
 	 
 Energy Stream
 -----------------
@@ -144,6 +146,6 @@ Energy Stream
 This model is used for dispalying heat loss/required for the unit operations which involve energy balance. This model can be
 instantiated by dragging and dropping. The code looks like follows ::
 
- Simulator.Streams.Energy_Stream energy_Stream1 annotation(....);
+ Simulator.Streams.EnergyStream E1 annotation(....);
  
 We will discuss about this in detail when we describe unit operations which requires energy stream.
