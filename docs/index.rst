@@ -25,5 +25,6 @@ This documentation is the main source of information for **users** and **develop
    User Guide <user-guide/user-home>
    Developer Guide <developers-guide/dev-home>
    Publications <publications>
+   License <license>
    Team <team/team>
 
