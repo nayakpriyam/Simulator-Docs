@@ -53,16 +53,16 @@ The conversion of acetic acid is 30%. Assume the reactor to be operated isotherm
 
 Below listed points are the step by step explaination as to how to create and simulate this conversion reactor example.
 
- 1. Create a package named ``CR``.
+ 1. Create a package named ``ConversionReactor``.
 
- 2. Create a model named ``ms`` inside ``CR``. This is to extend ``MaterialStream`` model.
+ 2. Create a model named ``MS`` inside ``ConversionReactor``. This is to extend ``MaterialStream`` model.
 
  3. Extend the model ``MaterialStream`` and necessary property method from ``ThermodynamicPackages`` ::
 
 		extends Simulator.Streams.MaterialStream;
 		extends Simulator.Files.ThermodynamicPackages.NRTL;
 
- 4. Create another new model named ``conv_react`` inside ``CR``. This is to extend ``ConversionReactor`` model.
+ 4. Create another new model named ``ConvReactor`` inside ``ConversionReactor``. This is to extend ``ConversionReactor`` model.
 
  5. Extend the model ``ConversionReactor`` from ``UnitOperations`` package. ::
 
@@ -72,7 +72,7 @@ Below listed points are the step by step explaination as to how to create and si
   
 		extends Simulator.Files.Models.ReactionManager.ConversionReaction;
 		
- 7. Create another new model named ``test`` inside ``CR``.
+ 7. Create another new model named ``ConvReactSimulation`` inside ``ConversionReactor``.
  
  8. Similar to the ``MaterialStream`` example model, import ``ChemsepDatabase`` and create variables for the compounds which are to be used from ``ChemsepDatabase``. ::
 	
@@ -87,8 +87,8 @@ Below listed points are the step by step explaination as to how to create and si
 		parameter Integer Nc = 4;
 		parameter data.GeneralProperties C[Nc] = {etac, wat, aa, eth};
 		
- 10. Now, create two instances of the ``MaterialStream`` model ``ms`` as we require two material streams which will go as input and comes out as output.
- To do this, open diagram view of ``test`` model, drag & drop ``ms`` twice as shown in fig. Name the instances as ``S1`` and ``S2``.
+ 10. Now, create two instances of the ``MaterialStream`` model ``MS`` as we require two material streams which will go as input and comes out as output.
+ To do this, open diagram view of ``test`` model, drag & drop ``MS`` twice as shown in fig. Name the instances as ``S1`` and ``S2``.
 
 	 .. image:: ../img/cr-ms-drop.png
 	
@@ -122,9 +122,9 @@ Below listed points are the step by step explaination as to how to create and si
 	 
  15. Switch to text view. Following lines of code will be autogenrated ::
 	 
-	  Simulator.Examples.CR.ms S1(Nc = Nc, C = C) annotation( ...);
-	  Simulator.Examples.CR.ms S2(Nc = Nc, C = C) annotation( ...);
-	  Simulator.Examples.CR.conv_react B1(Nc = Nc, C = C, Nr = 1, BC_r = {3}, Coef_cr = {{1}, {1}, {-1}, {-1}}, X_r = {0.3}, CalcMode = "Isothermal", Tdef = 300) annotation( ...);
+	  Simulator.Examples.ConversionReactor.MS S1(Nc = Nc, C = C) annotation( ...);
+	  Simulator.Examples.ConversionReactor.MS S2(Nc = Nc, C = C) annotation( ...);
+	  Simulator.Examples.ConversionReactor.ConvReactor B1(Nc = Nc, C = C, Nr = 1, BC_r = {3}, Coef_cr = {{1}, {1}, {-1}, {-1}}, X_r = {0.3}, CalcMode = "Isothermal", Tdef = 300) annotation( ...);
   
  16. Now, connect the streams with unit operations. For this, switch back to Diagram view.
  
@@ -143,10 +143,10 @@ Below listed points are the step by step explaination as to how to create and si
   	  S1.x_pc[1, :] = {0, 0, 0.4, 0.6};
   	  S1.F_p[1] = 100;
 
- 19. This completes the ``CR`` package. Now click on ``Simulate`` button to simulate the ``test`` model. Switch to Plotting Perspective to view the results.
+ 19. This completes the ``ConversionReactor`` package. Now click on ``Simulate`` button to simulate the ``ConvReactSimulation`` model. Switch to Plotting Perspective to view the results.
  
  .. note::
- 		 You can also find this package named ``CR`` in the ``Simulator`` library under ``Examples`` package.
+ 		 You can also find this package named ``ConversionReactor`` in the ``Simulator`` library under ``Examples`` package.
 
 
 Equilibrium Reactor
@@ -212,14 +212,14 @@ Below listed points are the step by step explaination as to how to create and si
 
  1. Create a package named ``EquilibriumReactor``.
 
- 2. Create a model named ``ms`` inside ``EquilibriumReactor``. This is to extend ``MaterialStream`` model.
+ 2. Create a model named ``MS`` inside ``EquilibriumReactor``. This is to extend ``MaterialStream`` model.
 
  3. Extend the model ``MaterialStream`` and necessary property method from ``ThermodynamicPackages`` ::
 
 		extends Simulator.Streams.MaterialStream;
 		extends Simulator.Files.ThermodynamicPackages.RaoultsLaw;
 		
- 4. Create another new model named ``EqRxr`` inside ``EquilibriumReactor``.
+ 4. Create another new model named ``EqReactorSimulation_Ex1`` inside ``EquilibriumReactor``.
  
  5. Similar to the ``MaterialStream`` example model, import ``ChemsepDatabase`` and create variables for the compounds which are to be used from ``ChemsepDatabase``. ::
 	
@@ -233,7 +233,7 @@ Below listed points are the step by step explaination as to how to create and si
 		parameter Integer Nc = 3;
 		parameter data.GeneralProperties C[Nc] = {hyd,com,meth};
 		
- 7. Now, create two instances of the ``MaterialStream`` model ``ms`` as we require two material streams which will go as input and comes out as output. To do this, open diagram view of ``EqRxr`` model, drag & drop ``ms`` twice as shown in fig. Name the instances as ``Inlet`` and ``Outlet``.
+ 7. Now, create two instances of the ``MaterialStream`` model ``MS`` as we require two material streams which will go as input and comes out as output. To do this, open diagram view of ``EqReactorSimulation_Ex1`` model, drag & drop ``MS`` twice as shown in fig. Name the instances as ``S1`` and ``S2``.
 
 	 .. image:: ../img/eq-ms-drop.png
 	
@@ -248,7 +248,7 @@ Below listed points are the step by step explaination as to how to create and si
 	 
 	  	.. image:: ../img/eq-in-par.png
 	  
- 10. Now double click on ``Eqreactor``. Component Parameters window opens. 
+ 10. Now double click on ``B1``. Component Parameters window opens. 
  Go to Reactor Specifications tab and enter the values for parameters as mentioned below:
      
 	 - ``Nc`` and ``C`` can be entered same as material stream 
@@ -262,15 +262,15 @@ Below listed points are the step by step explaination as to how to create and si
 	 - ``Basis`` represents the basis on which the equilibrium constant is defined. Currently, the equilibrium reactor support three basis: activity, mole fraction and partial pressure. As per the problem statement, the equilibrium constant is defined on basis of activity. SO enter the ``Basis`` as ``Activity``.
 	 - ``Coef_cr`` represents the stoichiometric coefficients of the components in the reaction. Enter the value as ``{{1}, {1}, {-1}, {-1}}``.
 	 - ``Rmode`` represents the different modes by which the equilibrium constant an be defined. Currently, equilibrium reactor supports two modes: Constant K and K as a function of temperature. As per the problem statement, equilibirum constant value is given. So enter ``Rmode`` as ``ConstantK``.
-	 - ``Kg`` represents the equilibrium constant value. Enter the value as {0.5}.
+	 - ``Kg`` represents the equilibrium constant value. Enter the value as ``{0.5}``.
 	   
 	 .. image:: ../img/eqx-par.png
 	 
  12. Switch to text view. Following lines of code will be autogenrated ::
 	 
-	  Simulator.Examples.EquilibriumReactor.ms Inlet(Nc = Nc, C = C) annotation( ...);
-	  Simulator.Examples.EquilibriumReactor.ms Outlet(Nc = Nc, C = C) annotation( ...);
-	  Simulator.UnitOperations.EquilibriumReactor Eqreactor(Basis = "Activity",C = C, Coef_cr = {{-2}, {-1}, {1}}, Kg = {0.5}, Mode = "Isothermal", Nc = Nc, Phase = "Vapour", Rmode = "ConstantK") annotation( ...);
+	  Simulator.Examples.EquilibriumReactor.MS S1(Nc = Nc, C = C) annotation( ...);
+	  Simulator.Examples.EquilibriumReactor.MS S2(Nc = Nc, C = C) annotation( ...);
+	  Simulator.UnitOperations.EquilibriumReactor B1(Basis = "Activity",C = C, Coef_cr = {{-2}, {-1}, {1}}, Kg = {0.5}, Mode = "Isothermal", Nc = Nc, Phase = "Vapour", Rmode = "ConstantK") annotation( ...);
   
  13. Now, connect the streams with unit operations. For this, switch back to Diagram view.
  
@@ -279,18 +279,18 @@ Below listed points are the step by step explaination as to how to create and si
 
  14. Switch to text view. Following lines of code will be autogenrated under ``equation`` section :: 
   
-		connect(Inlet.Out, Eqreactor.In) annotation( ...);
-		connect(Eqreactor.Out, Outlet.In) annotation( ...);
+		connect(S1.Out, B1.In) annotation( ...);
+		connect(B1.Out, S2.In) annotation( ...);
 
  15. Specify the pressure, temperature, component mole fractions and molar flow rate for the inlet material stream ::
 
-  	  Inlet.T = 366.5;
-  	  Inlet.P = 101325;
-  	  Inlet.F_p[1] = 27.7778;
-  	  Inlet.x_pc[1, :] = {0.667,0.333,0};
+  	  S1.T = 366.5;
+  	  S1.P = 101325;
+  	  S1.F_p[1] = 27.7778;
+  	  S1.x_pc[1, :] = {0.667,0.333,0};
 
 
- 16. This completes the ``EquilibriumReactor`` package. Now click on ``Simulate`` button to simulate the ``EqRxr`` model. Switch to Plotting Perspective to view the results.
+ 16. This completes the ``EquilibriumReactor`` package. Now click on ``Simulate`` button to simulate the ``EqReactorSimulation_Ex1`` model. Switch to Plotting Perspective to view the results.
  
  .. note::
  		 You can also find this example named ``EquilibriumReactor`` in the ``Simulator`` library under ``Examples`` package.
@@ -375,7 +375,7 @@ Below listed points are the step by step explaination as to how to create and si
 		extends Simulator.Streams.MaterialStream;
 		extends Simulator.Files.ThermodynamicPackages.RaoultsLaw;
 		
- 4. Create another new model named ``PFR_Test_II`` inside ``PFR``.
+ 4. Create another new model named ``PFRSimulation`` inside ``PFR``.
  
  5. Similar to the ``MaterialStream`` example model, import ``ChemsepDatabase`` and create variables for the compounds which are to be used from ``ChemsepDatabase``. ::
 	
@@ -389,7 +389,7 @@ Below listed points are the step by step explaination as to how to create and si
 		parameter Integer Nc = 3;
 		parameter data.GeneralProperties C[Nc] = {eth, wat, eg};
 		
- 7. Now, create two instances of the ``MaterialStream`` model ``ms`` as we require two material streams which will go as input and comes out as output. To do this, open diagram view of ``PFR_Test_II` model, drag & drop ``MS`` twice as shown in fig. Name the instances as ``S1`` and ``S2``.
+ 7. Now, create two instances of the ``MaterialStream`` model ``MS`` as we require two material streams which will go as input and comes out as output. To do this, open diagram view of ``PFRSimulation` model, drag & drop ``MS`` twice as shown in fig. Name the instances as ``S1`` and ``S2``.
 
 	 .. image:: ../img/pfr-ms-drop.png
 	
@@ -402,23 +402,26 @@ Below listed points are the step by step explaination as to how to create and si
  As the value for ``Nc`` and ``C`` are already declared earlier in step 6 while defining the variables, these variables are passed here instead of the values. 
  Repeat this for the other material stream.
 	 
-	  	.. image:: ../img/eq-in-par.png
+	  	.. image:: ../img/pfr-in-par.png
 	  
- 10. Now double click on ``Eqreactor``. Component Parameters window opens. 
+ 10. Now double click on ``B1``. Component Parameters window opens. 
  Go to Reactor Specifications tab and enter the values for parameters as mentioned below:
      
 	 - ``Nc`` and ``C`` can be entered same as material stream 
-	 - ``CalcMode`` represents the operation mode for equilibrium reactor. Currently, equilibrium reactor support three different modes of operation which are Isothermal,Adiabatic and Defined Outlet Temperature. As per the problem statement, Isothermal is to be used here. So enter ``"Isothermal"``.
+	 - ``Mode`` represents the operation mode for equilibrium reactor. Currently, plug flow reactor support three different modes of operation which are Isothermal,Adiabatic and Defined Outlet Temperature. As per the problem statement, Isothermal is to be used here. So enter ``"Isothermal"``.
+	 - ``Pdel`` represents the pressure drop across the PFR. Enter the value as ``90.65``.
 
-	    .. image:: ../img/eq-par.png
+	    .. image:: ../img/pfr-par.png
 
  11. Go to Reactions tab and enter the reaction details as mentioned below:
 	 
 	 - ``Phase`` represents the reaction phase. Currently, the equilibrium reactor support two phases: vapour and liquid. As per the problem statement, it's a vapour phase reaction. So enter the ``Phase`` as ``Vapour``.
 	 - ``Basis`` represents the basis on which the equilibrium constant is defined. Currently, the equilibrium reactor support three basis: activity, mole fraction and partial pressure. As per the problem statement, the equilibrium constant is defined on basis of activity. SO enter the ``Basis`` as ``Activity``.
+	 - ``Nr`` represents the number of reactions. Enter the value as ``1``.
+	 - ``Bc_r`` represents the base component of the reaction. 
 	 - ``Coef_cr`` represents the stoichiometric coefficients of the components in the reaction. Enter the value as ``{{1}, {1}, {-1}, {-1}}``.
 	 - ``Rmode`` represents the different modes by which the equilibrium constant an be defined. Currently, equilibrium reactor supports two modes: Constant K and K as a function of temperature. As per the problem statement, equilibirum constant value is given. So enter ``Rmode`` as ``ConstantK``.
-	 - ``Kg`` represents the equilibrium constant value. Enter the value as {0.5}.
+	 - ``Kg`` represents the equilibrium constant value. Enter the value as ``{0.5}``.
 	   
 	 .. image:: ../img/eqx-par.png
 	 
